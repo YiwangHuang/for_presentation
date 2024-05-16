@@ -1,0 +1,37 @@
+[
+  {
+    "objectID": "post/GGB竖直模拟粒子在复合场中的运动.html",
+    "href": "post/GGB竖直模拟粒子在复合场中的运动.html",
+    "title": "LovePhysics",
+    "section": "",
+    "text": "添加布尔变量 isStart=false，用于控制计时的开始或暂停\nisStart=false\n添加变量 t=0，表示动画运行的总时间\nt=0\n添加变量 dt=0.02，表示步进的时间间隔\n添加滑动条 speed=slider(1,10,1)，控制动画播放速度\n添加滑动条 N，N 启动动画后，在 speed=10 的情况下，约每 dt 时间触发一次 Update 事件，我们通过在 N 的\n\nUpdate 事件中添加脚本来刷新物体位置、速度等来实现物体的运动"
+  },
+  {
+    "objectID": "post/GGB竖直模拟粒子在复合场中的运动.html#时间控制模块",
+    "href": "post/GGB竖直模拟粒子在复合场中的运动.html#时间控制模块",
+    "title": "LovePhysics",
+    "section": "",
+    "text": "添加布尔变量 isStart=false，用于控制计时的开始或暂停\nisStart=false\n添加变量 t=0，表示动画运行的总时间\nt=0\n添加变量 dt=0.02，表示步进的时间间隔\n添加滑动条 speed=slider(1,10,1)，控制动画播放速度\n添加滑动条 N，N 启动动画后，在 speed=10 的情况下，约每 dt 时间触发一次 Update 事件，我们通过在 N 的\n\nUpdate 事件中添加脚本来刷新物体位置、速度等来实现物体的运动"
+  },
+  {
+    "objectID": "post/GGB竖直模拟粒子在复合场中的运动.html#在磁场区域内的运动",
+    "href": "post/GGB竖直模拟粒子在复合场中的运动.html#在磁场区域内的运动",
+    "title": "LovePhysics",
+    "section": "在磁场区域内的运动",
+    "text": "在磁场区域内的运动"
+  },
+  {
+    "objectID": "post/GGB竖直模拟粒子在复合场中的运动.html#绘制匀强电场区域",
+    "href": "post/GGB竖直模拟粒子在复合场中的运动.html#绘制匀强电场区域",
+    "title": "LovePhysics",
+    "section": "绘制匀强电场区域",
+    "text": "绘制匀强电场区域\n\n画四个点A、B、C、D 作为电场区域的四个顶点（也可以是任意形状），绘制四边形\ntE=Polygon(A,B,C,D)\n画点A’，场强\nE=Vector(A,A')\n定义平行直线的间距\nlineSpacing = 1\n场强的单位法向量\nE'=UnitVector(PerpendicularVector(E))\n作一组平行直线备用\nlE1=Sequence(Line(A+lineSpacing i E',E), i,-10,10)\n两组交点，其中 A+100 Rotate(E', 1) 表示起始迭代点，两组的起始迭代点不同，以控制向量方向\nlE2=Sequence(Intersect(lE1(i),tE,A+100 Rotate(E',1)),i,1,Length(lE1))\nlE3=Sequence(Intersect(lE1(i),tE,A+100 Rotate(E',π+1)),i,1,Length(lE1))\n交点两两组成向量\nListE=Sequence(Vector(lE2(i),lE3(i)),i,1,Length(lE1))\n添加按钮 AnimationControl = Button()，用于控制 N 动画的开始与暂停，在其 Click 事件中添加脚本。\nSetValue(isStart,!isStart)\nStartAnimation(N,isStart)\nSetCaption(button1,if(isStart,\"off\",\"on\"))"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "黄轶凡的个人博客（Alpha）"
+  }
+]
