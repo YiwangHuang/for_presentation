@@ -33,12 +33,5 @@
     "title": "例谈GGB创作技巧——材料",
     "section": "绘制匀强电场区域",
     "text": "绘制匀强电场区域\n\n画四个点A、B、C、D 作为电场区域的四个顶点（也可以是任意形状），绘制四边形\ntE=Polygon(A,B,C,D)\n画点A’，场强\nE=Vector(A,A')\n定义平行直线的间距\nlineSpacing = 1\n场强的单位法向量\nE'=UnitVector(PerpendicularVector(E))\n作一组平行直线备用\nlE1=Sequence(Line(A+lineSpacing i E',E), i,-10,10)\n两组交点，其中 A+100 Rotate(E', 1) 表示起始迭代点，两组的起始迭代点不同，以控制向量方向\nlE2=Sequence(Intersect(lE1(i),tE,A+100 Rotate(E',1)),i,1,Length(lE1))\nlE3=Sequence(Intersect(lE1(i),tE,A+100 Rotate(E',π+1)),i,1,Length(lE1))\n交点两两组成向量\nListE=Sequence(Vector(lE2(i),lE3(i)),i,1,Length(lE1))\n添加按钮 AnimationControl = Button()，用于控制 N 动画的开始与暂停，在其 Click 事件中添加脚本。\nSetValue(isStart,!isStart)\nStartAnimation(N,isStart)\nSetCaption(button1,if(isStart,\"off\",\"on\"))"
-  },
-  {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "About",
-    "section": "",
-    "text": "黄轶凡的个人博客（Alpha）"
   }
 ]
