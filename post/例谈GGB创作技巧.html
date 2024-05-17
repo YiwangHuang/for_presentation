@@ -156,7 +156,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#时间控制模块" id="toc-时间控制模块" class="nav-link active" data-scroll-target="#时间控制模块">时间控制模块</a></li>
   <li><a href="#在磁场区域内的运动" id="toc-在磁场区域内的运动" class="nav-link" data-scroll-target="#在磁场区域内的运动">在磁场区域内的运动</a></li>
-  <li><a href="#绘制匀强电场区域" id="toc-绘制匀强电场区域" class="nav-link" data-scroll-target="#绘制匀强电场区域">绘制匀强电场区域</a></li>
+  <li><a href="#在复合场中的运动" id="toc-在复合场中的运动" class="nav-link" data-scroll-target="#在复合场中的运动">在复合场中的运动</a></li>
+  <li><a href="#应用实例" id="toc-应用实例" class="nav-link" data-scroll-target="#应用实例">应用实例</a></li>
   </ul>
 </nav>
     </div>
@@ -200,42 +201,73 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="时间控制模块" class="level2">
 <h2 class="anchored" data-anchor-id="时间控制模块">时间控制模块</h2>
 <ol type="1">
-<li><p>添加布尔变量 <code>isStart=false</code>，用于控制计时的开始或暂停</p>
-<p><code>isStart=false</code> 1</p></li>
-<li><p>添加变量 <code>t=0</code>，表示动画运行的总时间</p>
+<li><p>添加布尔变量 isStart，用于控制计时的开始或暂停</p>
+<p><code>isStart=false</code></p></li>
+<li><p>添加变量 t，表示动画运行的总时间，根据需要在设置调节 t 的区间</p>
 <p><code>t=0</code></p></li>
-<li><p>添加变量 <code>dt=0.02</code>，表示步进的时间间隔</p></li>
-<li><p>添加滑动条 <code>speed=slider(1,10,1)</code>，控制动画播放速度</p></li>
-<li><p>添加滑动条 N，N 启动动画后，在 speed=10 的情况下，约每 <code>dt</code> 时间触发一次 Update 事件，我们通过在 N 的</p></li>
+<li><p>添加变量 dt，表示步进的时间间隔</p>
+<p><code>dt=0.02</code></p></li>
+<li><p>添加滑动条 speed，控制动画播放速度</p>
+<p><code>speed=slider(1,10,1)</code></p></li>
+<li><p>添加滑动条 N，启动动画后，我们通过在 N 的 Update 事件中添加脚本来刷新物体位置、速度等来实现物体的运动</p>
+<p><code>N=slider(0,1/dt,1,speed)</code></p></li>
+<li><p>在 N 的 update 事件中添加脚本</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">SetValue</span>(t<span class="op">,</span>t<span class="op">+</span>dt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>添加按钮 <code>animationControl = Button("开始")</code>，用于控制动画，在其 Click 事件中添加脚本</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">SetValue</span>(isStart<span class="op">,!</span>isStart)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">StartAnimation</span>(N<span class="op">,</span>isStart)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">SetCaption</span>(animationControl<span class="op">,</span><span class="cf">if</span>(isStart<span class="op">,</span><span class="st">"停止"</span><span class="op">,</span><span class="st">"开始"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>添加按钮 <code>reset = Button("归零")</code>，用于使时间 t 归零。其 Click 事件中添加脚本</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">SetValue</span>(isStart<span class="op">,</span><span class="kw">false</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">StartAnimation</span>(N<span class="op">,</span>isStart)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">SetCaption</span>(animationControl<span class="op">,</span><span class="st">"开始"</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">SetValue</span>(t<span class="op">,</span><span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>添加按钮 <code>refresh=Button("清除轨迹")</code>，用于清除轨迹（如果有轨迹）。其 Click 事件中添加脚本</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ZoomIn</span>(<span class="dv">1</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
 </ol>
-<p>Update 事件中添加脚本来刷新物体位置、速度等来实现物体的运动</p>
 </section>
 <section id="在磁场区域内的运动" class="level2">
 <h2 class="anchored" data-anchor-id="在磁场区域内的运动">在磁场区域内的运动</h2>
-</section>
-<section id="绘制匀强电场区域" class="level2">
-<h2 class="anchored" data-anchor-id="绘制匀强电场区域">绘制匀强电场区域</h2>
 <ol type="1">
-<li><p>画四个点A、B、C、D 作为电场区域的四个顶点（也可以是任意形状），绘制四边形</p>
-<p><code>tE=Polygon(A,B,C,D)</code></p></li>
-<li><p>画点A’，场强</p>
-<p><code>E=Vector(A,A')</code></p></li>
-<li><p>定义平行直线的间距</p>
-<p><code>lineSpacing = 1</code></p></li>
-<li><p>场强的单位法向量</p>
-<p><code>E'=UnitVector(PerpendicularVector(E))</code></p></li>
-<li><p>作一组平行直线备用</p>
-<p><code>lE1=Sequence(Line(A+lineSpacing i E',E), i,-10,10)</code></p></li>
-<li><p>两组交点，其中 <code>A+100 Rotate(E', 1)</code> 表示起始迭代点，两组的起始迭代点不同，以控制向量方向</p>
-<p><code>lE2=Sequence(Intersect(lE1(i),tE,A+100 Rotate(E',1)),i,1,Length(lE1))</code></p>
-<p><code>lE3=Sequence(Intersect(lE1(i),tE,A+100 Rotate(E',π+1)),i,1,Length(lE1))</code></p></li>
-<li><p>交点两两组成向量</p>
-<p><code>ListE=Sequence(Vector(lE2(i),lE3(i)),i,1,Length(lE1))</code></p></li>
-<li><p>添加按钮 <code>AnimationControl = Button()</code>，用于控制 N 动画的开始与暂停，在其 Click 事件中添加脚本。</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">SetValue</span>(isStart<span class="op">,!</span>isStart)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">StartAnimation</span>(N<span class="op">,</span>isStart)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">SetCaption</span>(button1<span class="op">,</span><span class="cf">if</span>(isStart<span class="op">,</span><span class="st">"off"</span><span class="op">,</span><span class="st">"on"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>添加变量，带电体质量 <code>m=1</code>、带电量 <code>q=1</code>、磁感应强度 <code>B=1</code></p></li>
+<li><p>带电体位置 <code>P=(0,0)</code> 、速度 <code>v=(1,0,0)</code></p></li>
+<li><p>磁感应强度的矢量 <code>vectorB=(0,0,B)</code></p></li>
+<li><p>带电体加速度 <code>a_B=q/m*Cross(v,vectorB)</code></p></li>
+<li><p>在 q 的 update 事件中添加脚本，实现 P 点颜色随电荷正负变化</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">If</span>(q<span class="op">&lt;</span><span class="dv">0</span><span class="op">,</span><span class="fu">SetColor</span>(P<span class="op">,</span><span class="st">"Blue"</span>)<span class="op">,</span>q<span class="op">&gt;</span><span class="dv">0</span><span class="op">,</span><span class="fu">SetColor</span>(P<span class="op">,</span><span class="st">"Red"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>绘制任意形状作为磁场区域，命名为 <code>regionB</code></p></li>
 </ol>
+<div class="callout callout-style-default callout-warning callout-titled" title="注意">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+注意
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>绘制形状尽量不要用到 B、E 这些代表物理量的符号</p>
+</div>
+</div>
+<ol start="6" type="1">
+<li><p>在 N 的 update 事件中添加脚本，用于<strong>控制步进</strong></p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">If</span>(<span class="fu">IsInRegion</span>(P<span class="op">,</span>regionB)<span class="op">,</span> <span class="fu">SetValue</span>(v<span class="op">,</span> <span class="fu">abs</span>(v)<span class="op">*</span> <span class="fu">UnitVector</span>(v<span class="op">+</span>a_B<span class="op">*</span>dt)))<span class="op">;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">SetValue</span>(P<span class="op">,</span>P<span class="op">+</span>v<span class="op">*</span>dt)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>添加向量 <code>vDisplay=Vector(P,P+v)</code>，用于显示速度</p></li>
+</ol>
+<iframe src="https://ggbtool.phycat.cn/front/?id=lw9idt3t18n6&amp;W=800&amp;H=500&amp;E=0&amp;B=1&amp;S=0&amp;P=1&amp;R=0&amp;L=1&amp;F=1&amp;RE=1" width="800" height="500" frameborder="0" scrolling="no" allowfullscreen="">
+</iframe>
+</section>
+<section id="在复合场中的运动" class="level2">
+<h2 class="anchored" data-anchor-id="在复合场中的运动">在复合场中的运动</h2>
+<iframe src="https://ggbtool.phycat.cn/front/?id=lw9j0lx6p3e&amp;W=800&amp;H=500&amp;E=0&amp;B=1&amp;S=0&amp;P=1&amp;R=0&amp;L=1&amp;F=1&amp;RE=1" width="800" height="500" frameborder="0" scrolling="no" allowfullscreen="">
+</iframe>
+</section>
+<section id="应用实例" class="level2">
+<h2 class="anchored" data-anchor-id="应用实例">应用实例</h2>
+<iframe src="https://ggbtool.phycat.cn/front/?id=lw9ikyozux6&amp;W=800&amp;H=500&amp;E=0&amp;B=1&amp;S=0&amp;P=1&amp;R=0&amp;L=1&amp;F=1&amp;RE=1" width="800" height="500" frameborder="0" scrolling="no" allowfullscreen="">
+</iframe>
 
 
 </section>
